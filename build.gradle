@@ -1,0 +1,48 @@
+buildscript {
+	ext {
+		springBootVersion = '2.7.5'
+		springDependencyManagementVersion = '1.0.15.RELEASE'
+		springCloudVersion = '2021.0.4'
+	}
+
+	repositories {
+		gradlePluginPortal()
+	}
+
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:${springDependencyManagementVersion}"
+		classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5"
+	}
+}
+
+allprojects {
+	group = 'kr.co.kumsung.dev'
+	version = '0.0.1-SNAPSHOT'
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	sourceCompatibility = 17
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
+
+	tasks.named("test") {
+		useJUnitPlatform()
+	}
+}
